@@ -1,0 +1,29 @@
+# Ignore IDE/project files
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.vscode/
+.idea/
+
+
+# Build output directories
+bin/
+obj/
+out/
+
+# ASP.NET Core environment files
+
+
+# Logs and debugging
+logs/
+*.log
+Debug/
+RELEASE/
+
+# User-specific files
+*.suo
+*.user
+*.ttf
+*.pdb
