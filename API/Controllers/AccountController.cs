@@ -32,6 +32,26 @@ namespace API.Controllers
             return user;
         }
 
+
+        [HttpPost("login")]
+        public async Task<ActionResult<AppUser>> Login(LoginDto loginDto)
+        {
+            AppUser? user = await dbContext.Users.SingleOrDefaultAsync(u => u.Email.ToLower() == loginDto.Email.ToLower());
+
+            if (user == null) return Unauthorized("Invalid Email Address.");
+
+            using var hmac = new HMACSHA512(user.PasswordSalt);
+
+            var computedPassword = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
+
+            for (int i = 0; i < user.PasswordHash.Length; i++)
+            {
+                if (user.PasswordHash[i] != computedPassword[i]) return Unauthorized("Invalid Password.");
+            }
+
+            return user;
+        }
+
         private async Task<bool> EmailExists(string email)
         {
             return await dbContext.Users.AnyAsync(u => u.Email.ToLower() == email.ToLower());
