@@ -3,6 +3,7 @@ using System.Text;
 using API.Data;
 using API.DTOs;
 using API.Entities;
+using API.Extensions;
 using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -30,13 +31,7 @@ namespace API.Controllers
 
             await dbContext.SaveChangesAsync();
 
-            return new UserDto()
-            {
-                DisplayName = user.DisplayName,
-                Email = user.Email,
-                Id = user.Id,
-                Token = tokenService.CreateToken(user)
-            };
+            return user.ToDto(tokenService);
         }
 
 
@@ -56,13 +51,7 @@ namespace API.Controllers
                 if (user.PasswordHash[i] != computedPassword[i]) return Unauthorized("Invalid Password.");
             }
 
-            return new UserDto()
-            {
-                DisplayName = user.DisplayName,
-                Email = user.Email,
-                Id = user.Id,
-                Token = tokenService.CreateToken(user)
-            };
+            return user.ToDto(tokenService);
         }
 
         private async Task<bool> EmailExists(string email)
