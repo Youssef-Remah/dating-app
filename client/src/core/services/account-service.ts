@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { tap } from 'rxjs';
-import { User } from '../../types/user';
+import { LoginCreds, RegisterCreds, User } from '../../types/user';
 
 @Injectable({
   providedIn: 'root',
@@ -13,12 +13,21 @@ export class AccountService {
 
   currentUser = signal<User | null>(null);
 
-  login(creds: any) {
+  register(creds: RegisterCreds) {
+    return this.http.post<User>(this.baseUrl + 'account/register', creds).pipe(
+      tap(user => {
+        if (user) {
+          this.setCurrentUser(user);
+        }
+      }),
+    );
+  }
+
+  login(creds: LoginCreds) {
     return this.http.post<User>(this.baseUrl + 'account/login', creds).pipe(
       tap(user => {
         if (user) {
-          localStorage.setItem("user", JSON.stringify(user));
-          this.currentUser.set(user);
+          this.setCurrentUser(user);
         }
       }),
     );
@@ -27,5 +36,10 @@ export class AccountService {
   logout() {
     localStorage.removeItem('user');
     this.currentUser.set(null);
+  }
+
+  setCurrentUser(user: User) {
+    localStorage.setItem("user", JSON.stringify(user));
+    this.currentUser.set(user);
   }
 }
