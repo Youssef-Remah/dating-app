@@ -1,14 +1,14 @@
 import { AccountService } from './../core/services/account-service';
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { firstValueFrom, lastValueFrom } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 import { Nav } from "../layout/nav/nav";
-import { Home } from "../features/home/home";
 import { User } from '../types/user';
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [Nav, Home],
+  imports: [Nav, RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -20,6 +20,8 @@ export class App implements OnInit {
   protected title = 'Dating App';
 
   protected members = signal<User[]>([]);
+
+  protected router = inject(Router);
 
   async ngOnInit(): Promise<void> {
     this.members.set(await this.getMembers());
