@@ -6,6 +6,8 @@ public class AppUser
 
     public required string DisplayName { get; set; }
 
+    public string? ImageUrl { get; set; }
+
     public required string Email { get; set; }
 
     public required byte[] PasswordHash { get; set; }
