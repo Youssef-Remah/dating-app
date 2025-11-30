@@ -1,3 +1,4 @@
+import { preventUnsavedChangesGuard } from './../core/guards/prevent-unsaved-changes-guard';
 import { Routes } from '@angular/router';
 import { Home } from '../features/home/home';
 import { MemberList } from '../features/members/member-list/member-list';
@@ -28,7 +29,7 @@ export const routes: Routes = [
                 runGuardsAndResolvers:'always',
                 children:[
                     { path: '', redirectTo: 'profile', pathMatch: 'full' },
-                    {path: 'profile', component: MemberProfile, title: 'Profile'},
+                    {path: 'profile', component: MemberProfile, title: 'Profile', canDeactivate: [preventUnsavedChangesGuard]},
                     {path: 'photos', component: MemberPhotos, title: 'Photos'},
                     {path: 'messages', component: MemberMessages, title: 'Messages'},
                 ]
